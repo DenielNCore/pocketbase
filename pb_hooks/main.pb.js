@@ -383,7 +383,7 @@ routerAdd('POST', '/api/createSingleInvoice/:bonuses/:id', (e) => {
   const authHeader = process.env.PAYPAL_CLIENT_KEY;
   // const authHeader = process.env.PAYPAL_DEV_CLIENT_KEY;
 
-  // console.log('authHeader', authHeader);
+  console.log('PAYPAL_CLIENT_KEY', authHeader);
   try {
     const tokenResponce = $http.send({
       url: 'https://api-m.paypal.com/v1/oauth2/token',
@@ -576,7 +576,7 @@ routerAdd('POST', '/api/createAdditionalInvoice/:id', (e) => {
       },
     },
   ];
-  // console.log('items.lo AFTER');
+  console.log('items.lo AFTER');
 
   // const authHeader = 'QWFwem9LdGhZNFE5RFZnTE9NSXFhRUk3MjdsTXVDYTlyS254NGJQUlU5UThMU05qYXdiZHFTME9YWG9rODZ0enRTZ09BZDBQTVZUNnA4blc6RUVBcHlveFdwR081YVpvZFVZOXVsMk1Ha1RSbDZ0VjBuT3JZN0FTZHJSWHlpbng2SjB1SVNuQ1BBODBubUc3T0QzSXdFdVc4cWNBdXdnQzI=';
   // const authHeader = 'QVpuWVJoR1habW5YbTBkbVBpTHJJUUpjV1NHLW1yaUNwRXVjMjd3NkZ2MEtRTFVidUFKVUpqLVpUXy1sRDg5bFl4N0x2RVVXOVlpODhJcEk6RUs5Z3BzRl82Tmd3Qmh5VnREeXk2aTJnM1hDdkV4d1pDRGdBTkpjVGtiYk5vZy1OLVkxTUVmVnpnMWd6eEdtRnFKYzNTb0s3NWE3YlY3T1c=';
