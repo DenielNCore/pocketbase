@@ -11,7 +11,7 @@ onRecordAfterCreateRequest((e) => {
   cartRecord.set('orders', [...cartRecord.get('orders'), e.record.id]);
 
   $app.dao().saveRecord(cartRecord);
-  // console.log('order ADDED TO CART');
+  console.log('order ADDED TO CART');
 
   $app.dao().saveRecord(userRecord);
 }, 'orders');
