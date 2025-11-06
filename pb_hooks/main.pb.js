@@ -2,8 +2,7 @@
 
 onRecordAfterCreateRequest((e) => {
   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-  console.log('ID');
-  console.log(e.record.id);
+
   userRecord.set('orders', [...userRecord.get('orders'), e.record.id]);
 
   const cartRecord = $app.dao().findRecordById('carts', userRecord.get('cart'));
@@ -11,7 +10,6 @@ onRecordAfterCreateRequest((e) => {
   cartRecord.set('orders', [...cartRecord.get('orders'), e.record.id]);
 
   $app.dao().saveRecord(cartRecord);
-  console.log('order ADDED TO CART');
 
   $app.dao().saveRecord(userRecord);
 }, 'orders');
@@ -26,8 +24,7 @@ onRecordAfterCreateRequest((e) => {
 
 onRecordAfterCreateRequest((e) => {
   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-  // console.log('ID');
-  // console.log(e.record.id);
+
   userRecord.set('deliveryList', [...userRecord.get('deliveryList'), e.record.id]);
 
   $app.dao().saveRecord(userRecord);
@@ -56,36 +53,6 @@ onRecordAfterUpdateRequest((e) => {
   }
 }, 'orders');
 
-routerAdd('POST', '/api/requestBonusPayment1/:bonuses', (e) => {
-  console.log('bef test');
-
-  let bonuses = e.pathParam('bonuses');
-
-  console.log('test', bonuses);
-  // do something ...
-  return e.json(200, { success: true });
-});
-
-routerAdd('POST', '/api/requestBonusPayment/:bonuses', (e) => {
-  let bonuses = e.pathParam('bonuses');
-  console.log('bonuses', bonuses);
-  // do something ...
-  return e.json(200, { success: true });
-});
-
-routerAdd('GET', '/api/requestBonusPayment3/:bonuses', (e) => {
-  let bonuses = e.pathParam('bonuses');
-  console.log('bonuses 3 get', bonuses);
-  // do something ...
-  return e.json(200, { success: true });
-});
-
-routerAdd('POST', '/api/requestBonusPayment3/:bonuses', (e) => {
-  let bonuses = e.pathParam('bonuses');
-  console.log('bonuses 3 post', bonuses);
-  // do something ...
-  return e.json(200, { success: true });
-});
 
 routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
   const userRecord = $apis.requestInfo(e).authRecord;
@@ -130,7 +97,6 @@ routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
   // const mediumBonus = Math.round(bonuses / orderList.length);
   const items = orderList.map((order) => {
     const possibleDiscount = order.totalPrice - order.discount;
-    // console.log('1', possibleDiscount);
     let currentDiscount = 0;
     if (possibleDiscount < 0) {
       currentDiscount = 0;
@@ -143,7 +109,6 @@ routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
       currentDiscount = totalBonusAmount;
       totalBonusAmount = 0;
     }
-    // console.log('currentDiscount,', currentDiscount);
     const discount = Number(order.discount) + Number(currentDiscount);
     // const description = order.customizer.stickers.length ? 'customizations: ' + customizer.stickers.map(sticker => sticker.type).join(', ') : '';
     return {
@@ -164,7 +129,6 @@ routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
     };
   });
 
-  // console.log('items.lo AFTER');
 
   // const authHeader = 'QWFwem9LdGhZNFE5RFZnTE9NSXFhRUk3MjdsTXVDYTlyS254NGJQUlU5UThMU05qYXdiZHFTME9YWG9rODZ0enRTZ09BZDBQTVZUNnA4blc6RUVBcHlveFdwR081YVpvZFVZOXVsMk1Ha1RSbDZ0VjBuT3JZN0FTZHJSWHlpbng2SjB1SVNuQ1BBODBubUc3T0QzSXdFdVc4cWNBdXdnQzI=';
   // const authHeader = 'QVpuWVJoR1habW5YbTBkbVBpTHJJUUpjV1NHLW1yaUNwRXVjMjd3NkZ2MEtRTFVidUFKVUpqLVpUXy1sRDg5bFl4N0x2RVVXOVlpODhJcEk6RUs5Z3BzRl82Tmd3Qmh5VnREeXk2aTJnM1hDdkV4d1pDRGdBTkpjVGtiYk5vZy1OLVkxTUVmVnpnMWd6eEdtRnFKYzNTb0s3NWE3YlY3T1c=';
@@ -245,7 +209,6 @@ routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
       $app.dao().saveRecord(invoiceRecord);
 
       const invoiceId = invoiceRecord.get('id');
-      // console.log('invoiceId', invoiceId);
       userRecord.set('invoices', [...userRecord.get('invoices'), invoiceId]);
       // console.log('cash', userRecord.get('cash'), bonuses);
       if (bonuses) {
@@ -255,7 +218,7 @@ routerAdd('POST', '/api/createInvoice/:bonuses', (e) => {
       $app.dao().saveRecord(userRecord);
 
       const link = response.json.links.find(link => link.rel === 'send');
-      // console.log('link', link.href);
+
       $app.dao().saveRecord(cartRecord);
 
       const sendResponse = $http.send({
@@ -322,7 +285,7 @@ routerAdd('POST', '/api/createSingleInvoice/:bonuses/:id', (e) => {
   const restCartIds = recordIds.filter(id => id !== orderId);
 
   const orderRecord = $app.dao().findRecordById('orders', orderId);
-  // console.log(1.4);
+
   orderList.push({
     record: orderRecord,
     id: orderRecord.get('id'),
@@ -332,17 +295,15 @@ routerAdd('POST', '/api/createSingleInvoice/:bonuses/:id', (e) => {
     totalPrice: orderRecord.get('totalPrice'),
     discount: orderRecord.get('discount'),
   });
-  // console.log(1.7);
 
   cartRecord.set('orders', restCartIds);
   // $app.dao().saveRecord(cartRecord);
-  // console.log(2);
 
   let totalBonusAmount = bonuses;
   // const mediumBonus = Math.round(bonuses / orderList.length);
   const items = orderList.map((order) => {
     const possibleDiscount = order.totalPrice - order.discount;
-    // console.log('1', possibleDiscount);
+
     let currentDiscount = 0;
     if (possibleDiscount < 0) {
       currentDiscount = 0;
@@ -355,7 +316,6 @@ routerAdd('POST', '/api/createSingleInvoice/:bonuses/:id', (e) => {
       currentDiscount = totalBonusAmount;
       totalBonusAmount = 0;
     }
-    // console.log('currentDiscount,', currentDiscount);
     const discount = Number(order.discount) + Number(currentDiscount);
     // const description = order.customizer.stickers.length ? 'customizations: ' + customizer.stickers.map(sticker => sticker.type).join(', ') : '';
     return {
@@ -376,14 +336,12 @@ routerAdd('POST', '/api/createSingleInvoice/:bonuses/:id', (e) => {
     };
   });
 
-  console.log('items.lo AFTER');
-
   // const authHeader = 'QWFwem9LdGhZNFE5RFZnTE9NSXFhRUk3MjdsTXVDYTlyS254NGJQUlU5UThMU05qYXdiZHFTME9YWG9rODZ0enRTZ09BZDBQTVZUNnA4blc6RUVBcHlveFdwR081YVpvZFVZOXVsMk1Ha1RSbDZ0VjBuT3JZN0FTZHJSWHlpbng2SjB1SVNuQ1BBODBubUc3T0QzSXdFdVc4cWNBdXdnQzI=';
   // const authHeader = 'QVpuWVJoR1habW5YbTBkbVBpTHJJUUpjV1NHLW1yaUNwRXVjMjd3NkZ2MEtRTFVidUFKVUpqLVpUXy1sRDg5bFl4N0x2RVVXOVlpODhJcEk6RUs5Z3BzRl82Tmd3Qmh5VnREeXk2aTJnM1hDdkV4d1pDRGdBTkpjVGtiYk5vZy1OLVkxTUVmVnpnMWd6eEdtRnFKYzNTb0s3NWE3YlY3T1c=';
   const authHeader = process.env.PAYPAL_CLIENT_KEY;
   // const authHeader = process.env.PAYPAL_DEV_CLIENT_KEY;
 
-  console.log('PAYPAL_CLIENT_KEY', authHeader);
+  // console.log('PAYPAL_CLIENT_KEY', authHeader);
   try {
     const tokenResponce = $http.send({
       url: 'https://api-m.paypal.com/v1/oauth2/token',
@@ -576,14 +534,13 @@ routerAdd('POST', '/api/createAdditionalInvoice/:id', (e) => {
       },
     },
   ];
-  console.log('items.lo AFTER');
 
   // const authHeader = 'QWFwem9LdGhZNFE5RFZnTE9NSXFhRUk3MjdsTXVDYTlyS254NGJQUlU5UThMU05qYXdiZHFTME9YWG9rODZ0enRTZ09BZDBQTVZUNnA4blc6RUVBcHlveFdwR081YVpvZFVZOXVsMk1Ha1RSbDZ0VjBuT3JZN0FTZHJSWHlpbng2SjB1SVNuQ1BBODBubUc3T0QzSXdFdVc4cWNBdXdnQzI=';
   // const authHeader = 'QVpuWVJoR1habW5YbTBkbVBpTHJJUUpjV1NHLW1yaUNwRXVjMjd3NkZ2MEtRTFVidUFKVUpqLVpUXy1sRDg5bFl4N0x2RVVXOVlpODhJcEk6RUs5Z3BzRl82Tmd3Qmh5VnREeXk2aTJnM1hDdkV4d1pDRGdBTkpjVGtiYk5vZy1OLVkxTUVmVnpnMWd6eEdtRnFKYzNTb0s3NWE3YlY3T1c=';
   const authHeader = process.env.PAYPAL_CLIENT_KEY;
   // const authHeader = process.env.PAYPAL_DEV_CLIENT_KEY;
 
-  console.log('PAYPAL_CLIENT_KEY', authHeader);
+  // console.log('PAYPAL_CLIENT_KEY', authHeader);
   try {
     const tokenResponce = $http.send({
       url: 'https://api-m.paypal.com/v1/oauth2/token',
@@ -790,53 +747,18 @@ routerAdd('POST', '/api/invoice/:id', (e) => {
 });
 
 routerAdd('POST', '/api/invoicePaid/', (e) => {
-  console.log('invoice PAID SuCCESS');
 
   const body = $apis.requestInfo(e).data;
 
-  // console.log('id', body.id);
-  // console.log('resource_type', body.resource_type);
-  // console.log('event_type', body.event_type);
-  // console.log('create_time', body.create_time);
 
   return e.json(200, { success: true });
 });
 
-// routerAdd('POST', '/api/status2/', (e) => {
-//   console.log('test');
-//   let status = e.request.pathValue('status');
-//   console.log('status', status);
-//
-//   console.log('end status ');
-//   return e.json(200, { message: 'Hello ' + 'www' });
-// });
-//
-// routerAdd('GET', '/status/', (e) => {
-//   console.log(e.request);
-//
-//   return e.json(200, { message: 'Hello!' });
-// });
 
-// routerUse((e) => {
-//   console.log(e.request.url.path);
-//   return e.next();
-// });
-
-// onRecordAfterDeleteSuccess((e) => {
-//   // e.app
-//   // e.record
-//   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-//   const cartRecord = $app.dao().findRecordById('carts', userRecord.get('cart'));
-//
-//   console.log('order DELETED FROM CART');
-//
-//   e.next();
-// }, 'orders');
 
 onRecordAfterCreateRequest((e) => {
   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-  // console.log('ID');
-  // console.log(e.record.id);
+
 
   // adding new payment to user record
   userRecord.set('payments', [...userRecord.get('payments'), e.record.id]);
@@ -883,24 +805,9 @@ routerAdd('GET', '/api/referralAvalaible/:referralCode', (e) => {
   }
 });
 
-// onRecordBeforeCreateRequest((e) => {
-//   // const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-//
-//   console.log('ID');
-//   console.log(e.record.id);
-//   // userRecord.set('orders', [...userRecord.get('orders'), e.record.id]);
-//
-//   // const itemsCollection = $app.dao().findCollectionByNameOrId('items');
-//   // const itemRecord = new Record(itemsCollection);
-//   //
-//   // const form = new RecordUpsertForm($app, itemRecord);
-//
-//   // $app.dao().saveRecord(userRecord);
-// }, 'orders');
+
 
 onRecordAfterCreateRequest((e) => {
-  // console.log('ID');
-  // console.log(e.record.id);
   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
 
   userRecord.set('cart', e.record.id);
@@ -923,7 +830,6 @@ onRecordAfterCreateRequest((e) => {
 
   const cartId = cartRecord.get('id');
 
-  // console.log('cartId', cartId);
   userRecord.set('cart', cartId);
 
   const referralCode = e.record.get('referralUser');
@@ -992,9 +898,6 @@ onRecordAfterAuthWithOAuth2Request((e) => {
     name: e.oAuth2User.name,
     cart: cartId,
   });
-
-  console.log('cartId', cartId);
-  // console.log('cart ID', cartRecord.get('id'));
 
   userRecord.set('cart', cartId);
 
