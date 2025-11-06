@@ -2,8 +2,8 @@
 
 onRecordAfterCreateRequest((e) => {
   const userRecord = $app.dao().findRecordById('users', e.record.get('user'));
-  // console.log('ID');
-  // console.log(e.record.id);
+  console.log('ID');
+  console.log(e.record.id);
   userRecord.set('orders', [...userRecord.get('orders'), e.record.id]);
 
   const cartRecord = $app.dao().findRecordById('carts', userRecord.get('cart'));
