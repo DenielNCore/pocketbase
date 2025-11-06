@@ -583,7 +583,7 @@ routerAdd('POST', '/api/createAdditionalInvoice/:id', (e) => {
   const authHeader = process.env.PAYPAL_CLIENT_KEY;
   // const authHeader = process.env.PAYPAL_DEV_CLIENT_KEY;
 
-  // console.log('authHeader', authHeader);
+  console.log('PAYPAL_CLIENT_KEY', authHeader);
   try {
     const tokenResponce = $http.send({
       url: 'https://api-m.paypal.com/v1/oauth2/token',
